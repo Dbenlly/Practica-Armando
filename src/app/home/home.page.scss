@@ -25,3 +25,22 @@
 #container a {
   text-decoration: none;
 }
+ion-content {
+--ion-background-color: #ffffff;
+}
+
+
+.result-card {
+margin-top: 16px;
+}
+
+
+.evaluation {
+font-size: 1.1rem;
+}
+
+
+.note {
+font-size: 0.9rem;
+color: var(--ion-color-medium);
+}
