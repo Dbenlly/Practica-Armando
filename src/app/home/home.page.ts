@@ -9,38 +9,40 @@ import { Component } from '@angular/core';
 export class HomePage {
 
   name: string = '';
-height: number | null = null; // en cm
-result: string | null = null;
+  gender: string = ''; // "hombre" o "mujer"
+  height: number | null = null;
+  result: string | null = null;
 
+  constructor() {}
 
-// Umbral por defecto (ajústalo si quieres otra regla)
-threshold: number = 165;
+  canSubmit(): boolean {
+    return !!this.name && !!this.gender && this.height !== null && !isNaN(this.height) && this.height > 0;
+  }
 
+  onSubmit() {
+    if (!this.canSubmit()) return;
+    this.evaluarEstatura();
+  }
 
-constructor() {}
+  evaluarEstatura() {
+    if (this.height === null || !this.gender) return;
 
-
-canSubmit(): boolean {
-return !!this.name && this.height !== null && !isNaN(this.height) && this.height > 0;
-}
-
-
-onSubmit() {
-if (!this.canSubmit()) return;
-this.evaluarEstatura();
-}
-
-
-evaluarEstatura() {
-if (this.height === null) return;
-
-
-// Regla simple: >= threshold -> alta, < threshold -> bajita
-if (this.height >= this.threshold) {
-this.result = 'Alta';
-} else {
-this.result = 'Bajita';
-}
-}
-
+    if (this.gender === 'hombre') {
+      if (this.height < 163) {
+        this.result = 'Bajito';
+      } else if (this.height > 175) {
+        this.result = 'Alto';
+      } else {
+        this.result = 'Promedio';
+      }
+    } else if (this.gender === 'mujer') {
+      if (this.height < 150) {
+        this.result = 'Bajita';
+      } else if (this.height > 170) {
+        this.result = 'Alta';
+      } else {
+        this.result = 'Promedio';
+      }
+    }
+  }
 }

@@ -1,49 +1,57 @@
 <ion-header>
-<ion-toolbar>
-<ion-title>¿Alta o bajita?</ion-title>
-</ion-toolbar>
+  <ion-toolbar>
+    <ion-title>¿Alta o bajita?</ion-title>
+  </ion-toolbar>
 </ion-header>
 
-
 <ion-content class="ion-padding">
-<form (ngSubmit)="onSubmit()" #formRef="ngForm">
-<ion-item>
-<ion-label position="stacked">Nombre</ion-label>
-<ion-input
-name="name"
-[(ngModel)]="name"
-required
-placeholder="Escribe tu nombre">
-</ion-input>
-</ion-item>
+  <form (ngSubmit)="onSubmit()" #formRef="ngForm">
+    <ion-item>
+      <ion-label position="stacked">Nombre</ion-label>
+      <ion-input
+        name="name"
+        [(ngModel)]="name"
+        required
+        placeholder="Escribe tu nombre">
+      </ion-input>
+    </ion-item>
 
+    <ion-item>
+      <ion-label position="stacked">Sexo</ion-label>
+      <ion-segment name="gender" [(ngModel)]="gender" required>
+        <ion-segment-button value="hombre">
+          Hombre
+        </ion-segment-button>
+        <ion-segment-button value="mujer">
+          Mujer
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
 
-<ion-item>
-<ion-label position="stacked">Estatura (cm)</ion-label>
-<ion-input
-name="height"
-type="number"
-[(ngModel)]="height"
-required
-placeholder="Ej. 170">
-</ion-input>
-</ion-item>
+    <ion-item>
+      <ion-label position="stacked">Estatura (cm)</ion-label>
+      <ion-input
+        name="height"
+        type="number"
+        [(ngModel)]="height"
+        required
+        placeholder="Ej. 170">
+      </ion-input>
+    </ion-item>
 
+    <ion-button expand="block" type="submit" [disabled]="!canSubmit()">Evaluar</ion-button>
+  </form>
 
-<ion-button expand="block" type="submit" [disabled]="!canSubmit()">Evaluar</ion-button>
-</form>
-
-
-<div *ngIf="result" class="result-card">
-<ion-card>
-<ion-card-header>
-<ion-card-title>Resultado</ion-card-title>
-</ion-card-header>
-<ion-card-content>
-<p><strong>{{ name || 'Usuario' }}</strong>, tu estatura es <strong>{{ height }} cm</strong>.</p>
-<p class="evaluation">Resultado: <strong>{{ result }}</strong></p>
-<p class="note">(Umbral usado: {{ threshold }} cm)</p>
-</ion-card-content>
-</ion-card>
-</div>
+  <div *ngIf="result" class="result-card">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Resultado</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>{{ name || 'Usuario' }}</strong>, tu estatura es <strong>{{ height }} cm</strong>.</p>
+        <p class="evaluation">Resultado: <strong>{{ result }}</strong></p>
+        <p class="note">(Referencia usada: {{ gender === 'hombre' ? 'Hombres' : 'Mujeres' }})</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
