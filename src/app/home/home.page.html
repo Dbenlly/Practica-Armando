@@ -6,6 +6,7 @@
 
 <ion-content class="ion-padding">
   <form (ngSubmit)="onSubmit()" #formRef="ngForm">
+    <!-- Nombre -->
     <ion-item>
       <ion-label position="stacked">Nombre</ion-label>
       <ion-input
@@ -16,18 +17,38 @@
       </ion-input>
     </ion-item>
 
+    <!-- Sexo -->
     <ion-item>
       <ion-label position="stacked">Sexo</ion-label>
       <ion-segment name="gender" [(ngModel)]="gender" required>
-        <ion-segment-button value="hombre">
-          Hombre
-        </ion-segment-button>
-        <ion-segment-button value="mujer">
-          Mujer
-        </ion-segment-button>
+        <ion-segment-button value="hombre">Hombre</ion-segment-button>
+        <ion-segment-button value="mujer">Mujer</ion-segment-button>
       </ion-segment>
     </ion-item>
 
+    <!-- País (15) -->
+    <ion-item>
+      <ion-label position="stacked">País</ion-label>
+      <ion-select name="country" [(ngModel)]="country" required>
+        <ion-select-option value="mx">🇲🇽 México (cm)</ion-select-option>
+        <ion-select-option value="us">🇺🇸 United States (ft/in)</ion-select-option>
+        <ion-select-option value="cn">🇨🇳 China (m)</ion-select-option>
+        <ion-select-option value="ca">🇨🇦 Canada (cm)</ion-select-option>
+        <ion-select-option value="uk">🇬🇧 United Kingdom (ft/in)</ion-select-option>
+        <ion-select-option value="de">🇩🇪 Germany (cm)</ion-select-option>
+        <ion-select-option value="fr">🇫🇷 France (cm)</ion-select-option>
+        <ion-select-option value="es">🇪🇸 Spain (cm)</ion-select-option>
+        <ion-select-option value="it">🇮🇹 Italy (cm)</ion-select-option>
+        <ion-select-option value="jp">🇯🇵 Japan (cm)</ion-select-option>
+        <ion-select-option value="kr">🇰🇷 South Korea (cm)</ion-select-option>
+        <ion-select-option value="au">🇦🇺 Australia (cm)</ion-select-option>
+        <ion-select-option value="br">🇧🇷 Brazil (cm)</ion-select-option>
+        <ion-select-option value="in">🇮🇳 India (cm)</ion-select-option>
+        <ion-select-option value="ru">🇷🇺 Russia (cm)</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Estatura (siempre en cm para el input) -->
     <ion-item>
       <ion-label position="stacked">Estatura (cm)</ion-label>
       <ion-input
@@ -42,16 +63,35 @@
     <ion-button expand="block" type="submit" [disabled]="!canSubmit()">Evaluar</ion-button>
   </form>
 
+  <!-- Resultado actual -->
   <div *ngIf="result" class="result-card">
     <ion-card>
       <ion-card-header>
         <ion-card-title>Resultado</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <p><strong>{{ name || 'Usuario' }}</strong>, tu estatura es <strong>{{ height }} cm</strong>.</p>
+        <p>
+          <strong>{{ name || 'Usuario' }}</strong>,
+          tu estatura es <strong>{{ convertedHeight }}</strong>
+          <span *ngIf="getCountryFlag(country)"> {{ getCountryFlag(country) }}</span>.
+        </p>
         <p class="evaluation">Resultado: <strong>{{ result }}</strong></p>
-        <p class="note">(Referencia usada: {{ gender === 'hombre' ? 'Hombres' : 'Mujeres' }})</p>
+        <p class="note">(País: {{ getCountryName(country) }})</p>
       </ion-card-content>
     </ion-card>
+  </div>
+
+  <!-- Historial -->
+  <div *ngIf="history.length > 0">
+    <h2>Historial</h2>
+    <ion-list>
+      <ion-item *ngFor="let item of history">
+        <ion-label>
+          <h3>{{ item.flag }} {{ item.name }}</h3>
+          <p>{{ item.convertedHeight }} - {{ item.result }}</p>
+          <p><small>{{ getCountryName(item.country) }}</small></p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
   </div>
 </ion-content>
