@@ -7,40 +7,43 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class HomePage {
-
   name: string = '';
-height: number | null = null; // en cm
-result: string | null = null;
+  grades: (number | string | null)[] = [null, null, null, null, null, null];
+  averageResult: number | null = null;
 
+  constructor() {
+  }
 
-// Umbral por defecto (ajústalo si quieres otra regla)
-threshold: number = 165;
+  canSubmit(): boolean {
+    if (!this.name) {
+      return false;
+    }
 
+    return this.grades.every(grade => {
+      if (grade === null) {
+        return false;
+      }
+      const numericGrade = Number(grade);
+      return !isNaN(numericGrade) && numericGrade >= 0;
+    });
+  }
 
-constructor() {}
+  onSubmit() {
+    if (!this.canSubmit()) return;
+    this.calculateAverage();
+  }
 
+  calculateAverage() {
+    const validGrades = this.grades
+      .filter(grade => grade !== null && !isNaN(Number(grade)))
+      .map(grade => Number(grade));
 
-canSubmit(): boolean {
-return !!this.name && this.height !== null && !isNaN(this.height) && this.height > 0;
-}
+    if (validGrades.length === 0) {
+      this.averageResult = null;
+      return;
+    }
 
-
-onSubmit() {
-if (!this.canSubmit()) return;
-this.evaluarEstatura();
-}
-
-
-evaluarEstatura() {
-if (this.height === null) return;
-
-
-// Regla simple: >= threshold -> alta, < threshold -> bajita
-if (this.height >= this.threshold) {
-this.result = 'Alta';
-} else {
-this.result = 'Bajita';
-}
-}
-
+    const sum = validGrades.reduce((total, currentGrade) => total + currentGrade, 0);
+    this.averageResult = sum / validGrades.length;
+  }
 }
