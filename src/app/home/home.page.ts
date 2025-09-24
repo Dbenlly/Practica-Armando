@@ -14,6 +14,8 @@ export class HomePage {
   constructor() {
   }
 
+
+
   canSubmit(): boolean {
     if (!this.name) {
       return false;
